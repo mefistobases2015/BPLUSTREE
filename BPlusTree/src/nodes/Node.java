@@ -27,7 +27,7 @@ public class Node<T> {
 	 *que tipo de nodo es este si este 
 	 *la raiz o un nodo interno 
 	 */
-	private int node_type;
+	protected int node_type;
 	
 	/**
 	 * Vector que va a almacenar las llaves 
@@ -44,7 +44,7 @@ public class Node<T> {
 	/**
 	 * Nodo padre de este nodo 
 	 */
-	private InternalNode<T> father = null;
+	protected InternalNode<T> father = null;
 	
 	/**
 	 * Constructor con el orden del arbol
@@ -138,6 +138,16 @@ public class Node<T> {
 	 */
 	public boolean isFull(){
 		return keys.size() >= order;
+	}
+	
+	/**
+	 * Retorna la cantidad de llaves 
+	 * que tiene el nodo
+	 * @return int con la cantidd 
+	 * de llaves que tiene el nodo
+	 */
+	public int keysSize(){
+		return keys.size();
 	}
 	
 	/**

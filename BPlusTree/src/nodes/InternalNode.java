@@ -46,6 +46,16 @@ public class InternalNode<T> extends Node<T> {
 	}
 	
 	/**
+	 * Este metodo retorna la cantidad 
+	 * de referencias que tiene este nodo
+	 * @return int que tiene la cantida de 
+	 * referencias que tiene este nodo.
+	 */
+	public int getReferencesSize(){
+		return references.size();
+	}
+	
+	/**
 	 * Inserta una referencia respecto a las llaves
 	 * @param reference Nodo que va a ser la referencia
 	 * a insertar

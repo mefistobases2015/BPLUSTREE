@@ -42,10 +42,12 @@ public class Tree<T> {
 	 * @param comp valor a insertar
 	 */
 	public void insert(TComparable<T> comp){
+		
 		if(root.getNode_type() == Node.SIMPLE_ROOT_NODE){
 			root.insert(comp);
 			if(root.isFull()){
 				root = splitNode(root);
+				root.setNode_type(Node.COMPLEX_ROOT_NODE);
 			}
 		}
 		else if(root.getNode_type() == Node.COMPLEX_ROOT_NODE){
@@ -68,9 +70,7 @@ public class Tree<T> {
 		InternalNode<T> tmpFather = new InternalNode<T>(order);
 		tmpFather.insert(node.getMidKey());
 		tmpFather.setFather(node.getFather());
-		if(node.getNode_type() == Node.SIMPLE_ROOT_NODE){
-			tmpFather.setNode_type(Node.COMPLEX_ROOT_NODE);
-		}
+		
 		tmpFather.insertReference(leftLNode);
 		tmpFather.insertReference(rightLNode);
 		
