@@ -49,6 +49,10 @@ public class Main {
 		
 		tree.print();
 		
+		System.out.println("\n");
+		
+		tree.printList();
+		
 		
 	}
 

@@ -143,11 +143,18 @@ public class Tree<T> {
 		//arreglo padre
 		father.insert(central_key);
 		//se agregan las nuevas referencias
-		node.getPrev().setNext(left_node);
+		if(node.getPrev() != null){
+			node.getPrev().setNext(left_node);
+		}
 		left_node.setPrev(node.getPrev());
 		//nuevo arreglo izquierdo
 		left_node.setNext(right_node);
 		right_node.setPrev(left_node);
+		//nodo derecho con lo derecho del nodo pasado
+		right_node.setNext(node.getNext());
+		if(node.getNext() != null){
+			node.getNext().setPrev(right_node);
+		}
 		//se elimina la hoja anterior
 		father.removeRef(node);
 		//se insertan las nuevas hojas
@@ -280,4 +287,28 @@ public class Tree<T> {
 			
 		}
 	}
+	
+	/**
+	 * Imprime la lista en las 
+	 * hojas del arbol
+	 */
+	public void printList(){
+		//busca el nodo menor
+		Node<T> tmp = root;
+		
+		while(tmp.getNode_type() != Node.LEAVE_NODE){
+			tmp = ((InternalNode<T>)(tmp)).getReference(0);
+		}
+		
+		LeaveNode<T> tmp2 = (LeaveNode<T>) tmp;
+		
+		do {
+			tmp2.print();
+			System.out.print("->");
+			tmp2 = tmp2.getNext();
+		} while (tmp2.getNext() != null);
+		
+		tmp2.print();
+	}
+	
 }
