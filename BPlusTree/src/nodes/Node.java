@@ -18,9 +18,8 @@ public class Node<T> {
 	
 	//TIPOS DE NODO
 	public static final int SIMPLE_ROOT_NODE = 0;
-	public static final int COMPLEX_ROOT_NODE = 1;
-	public static final int INTERNAL_NODE = 2;
-	public static final int LEAVE_NODE = 3;
+	public static final int INTERNAL_NODE = 1;
+	public static final int LEAVE_NODE = 2;
 	
 	/**
 	 *Tipo de nodo el cual especifica 
@@ -105,25 +104,22 @@ public class Node<T> {
 	 * nodo 
 	 */
 	public void insert(TComparable<T> comp){
-		if(this.node_type == Node.SIMPLE_ROOT_NODE ||
-				this.node_type == Node.LEAVE_NODE){
-			//Si no tiene elementos el nodo
-			if(keys.isEmpty()){
+		//Si no tiene elementos el nodo
+		if(keys.isEmpty()){
+			keys.addElement(comp);
+		//si tiene elementos y no ha llegado a la capacidad 
+		}else if(keys.size() < keys.capacity()){
+			//si la llave que se inserta es mayor que la ultima llave
+			//esta va desues de esa llave
+			if(keys.get(keys.size()-1).isLesser(comp)){
 				keys.addElement(comp);
-			//si tiene elementos y no ha llegado a la capacidad 
-			}else if(keys.size() < keys.capacity()){
-				//si la llave que se inserta es mayor que la ultima llave
-				//esta va desues de esa llave
-				if(keys.get(keys.size()-1).isLesser(comp)){
-					keys.addElement(comp);
-				}else{
-					//si no se compara si es menor que las otras llaves
-					//y se inserta antes que esa llave
-					for (int i = 0; i < keys.size(); i++) {
-						if(keys.elementAt(i).isGreater(comp)){
-							keys.add(i, comp);
-							break;
-						}
+			}else{
+				//si no se compara si es menor que las otras llaves
+				//y se inserta antes que esa llave
+				for (int i = 0; i < keys.size(); i++) {
+					if(keys.elementAt(i).isGreater(comp)){
+						keys.add(i, comp);
+						break;
 					}
 				}
 			}
@@ -154,7 +150,8 @@ public class Node<T> {
 	 * A la hora de partir el vector del nodo
 	 * por que se ha llenado retorna lado 
 	 * izquierdo del arreglo
-	 * @return un Vector de Comparables
+	 * @return un nodo con las llaves del 
+	 * nodo izuierdo cuando se llene un nodo
 	 */
 	public Vector<TComparable<T>> splitLeft(){
 		if(this.isFull()){
@@ -173,13 +170,14 @@ public class Node<T> {
 	 * A la hora de partir el vector del nodod
 	 * por que se ha llenado retorna el lado
 	 * derecho del arreglo 
-	 * @return un Vector de Comparables
+	 * @return un Node con las llaves de nodo 
+	 * derecho de cuando se llena el nodo
 	 */
 	public Vector<TComparable<T>> splitRight(){
 		if(this.isFull()){
 			Vector<TComparable<T>> right_vector = new Vector<TComparable<T>>(order);
 			
-			List<TComparable<T>> right = keys.subList((order/2), order);
+			List<TComparable<T>> right = keys.subList(((order/2)+1), order);
 			
 			right_vector.addAll(right);
 			
@@ -220,11 +218,13 @@ public class Node<T> {
 		return keys.firstElement();
 	}
 	
+	/**
+	 * Imprime el nodo
+	 */
 	public void print(){
 		for (int i = 0; i < keys.size(); i++) {
 			System.out.format("|%s|",keys.get(i).getKey().toString());
 		}
-		System.out.println();
 	}
 
 	/**
@@ -239,6 +239,55 @@ public class Node<T> {
 	 */
 	public void setFather(InternalNode<T> father) {
 		this.father = father;
+	}
+	
+	/**
+	 * Retorna si la llavae dada esta dentro de 
+	 * las llaves que se tienen almacenadas 
+	 * @param comp Llave que se va a probar 
+	 * si esta dentro del arrglo
+	 * @return true si se encuentra dentro 
+	 * del arreglo de llave.
+	 */
+	public boolean isKey(TComparable<T> comp){
+		return keys.contains(comp);
+	}
+	
+	/**
+	 * Retorna el indice de la llave dada
+	 * @param comp Llave a la que se le va a 
+	 * buscar el indice
+	 * @return el indice de la llave o -1 
+	 * si la llave no esta dentro del arreglo
+	 */
+	public int indexOfKey(TComparable<T> comp){
+		return keys.indexOf(comp);
+	}
+	
+	/**
+	 * Borra de las llaves la especificada
+	 * @param comp llave a borrar
+	 */
+	public void removeKey(TComparable<T> comp){
+		keys.remove(comp);
+	}
+	
+	/**
+	 * Coloca una nueva llave en la posicion 
+	 * especificada 
+	 * @param index posicion de la nueva llave
+	 * @param comp llave a colocar
+	 */
+	public void setKey(int index,TComparable<T> comp){
+		keys.set(index, comp);
+	}
+	
+	/**
+	 * Este metodo dice si un nodo tiene padre
+	 * @return true si tiene padre 
+	 */
+	public boolean haveFather(){
+		return father != null;
 	}
 	
 }

@@ -16,7 +16,7 @@ public class InternalNode<T> extends Node<T> {
 	/**
 	 * Referencias a las que apunta el nodo
 	 */
-	Vector<Node<T>> references;
+	private Vector<Node<T>> references;
 	
 	/**
 	 * Se crea el nodo con el orden del arbol
@@ -64,7 +64,6 @@ public class InternalNode<T> extends Node<T> {
 		//si la referencia va al final
 		if(reference.getMinKey().isGreater(this.getMaxKey()) || 
 				reference.getMinKey().isEqual(this.getMaxKey())){
-			reference.setFather(this);
 			if(references.size() >= keys.size()+1){
 				references.insertElementAt(reference, keys.size());
 			}else if(references.size() >= keys.size()){
@@ -74,7 +73,6 @@ public class InternalNode<T> extends Node<T> {
 			//si es menor que una llave se pone antes que la llave
 			for (int i = 0; i < keys.size(); i++) {
 				if(this.getKey(i).isGreater(reference.getMaxKey())){
-					reference.setFather(this);
 					if(references.size() <=i){
 						references.addElement(reference);
 					}else if(references.size() > i){
@@ -84,6 +82,115 @@ public class InternalNode<T> extends Node<T> {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Parte el nodo en dos y le agrega las referencias correspondientes 
+	 * @return
+	 */
+	public InternalNode<T> splitInternalLeft(){
+		if(this.isFull()){
+			InternalNode<T> leftIntNode = new InternalNode<T>(super.splitLeft());
+			
+			Vector<Node<T>> left_references = new Vector<Node<T>>(order+1);
+			left_references.addAll(references.subList(0, (order/2)+1 ));
+			
+			leftIntNode.setReferences(left_references);
+			
+			updateFatherRef(left_references, leftIntNode);
+			
+			return leftIntNode;
+		}
+		return null;
+		
+	}
+	
+	/**
+	 * Parte el nodo en dos y le agrega las referencias
+	 * asignadas a ese lado.
+	 * @return 
+	 */
+	public InternalNode<T> splitInternalRight(){
+		if(this.isFull()){
+			InternalNode<T> rightIntNode = new InternalNode<T>(super.splitRight());
+			
+			Vector<Node<T>> right_references = new Vector<Node<T>>(order+1);
+			right_references.addAll(references.subList((order/2)+1, order+1));
+			
+			rightIntNode.setReferences(right_references);
+			
+			updateFatherRef(right_references, rightIntNode);
+			
+			return rightIntNode;
+		}
+		return null;
+	}
+	
+	/**
+	 * Actualiza el padre de las referencias 
+	 * @param pReferences referencias a las que se les va actualizar el padre
+	 * @param pFather nuevo padre
+	 */
+	private void updateFatherRef(Vector<Node<T>> pReferences, InternalNode<T> pFather){
+		for (int i = 0; i < pReferences.size(); i++) {
+			pReferences.get(i).setFather(pFather);
+		}
+	}
+
+	/**
+	 * @return the references
+	 */
+	public Vector<Node<T>> getReferences() {
+		return references;
+	}
+
+	/**
+	 * @param references the references to set
+	 */
+	public void setReferences(Vector<Node<T>> references) {
+		this.references = references;
+	}
+	
+	/**
+	 * Esta función permite conocer si una referencia 
+	 * esta dentro de las referencias 
+	 * @param reference referencias a probar
+	 * @return true si esta referencia se encuentra 
+	 * dentro de las referencias.
+	 */
+	public boolean isReference(Node<T> reference){
+		return references.contains(reference);
+	}
+	
+	/**
+	 * Esta función retorna el indice en el que 
+	 * se encuentra una referencia.
+	 * @param reference referencia de la que 
+	 * se quiere saber la posicion
+	 * @return la poscion de la referencia y si 
+	 * no se encuentra en las referencias retorna
+	 * -1
+	 */
+	public int indexOfRef(Node<T> reference){
+		return references.indexOf(reference);
+	}
+	
+	/**
+	 * Elimina una referencia de las lista de referencias.
+	 * @param reference referencia a borrar del nodo
+	 */
+	public void removeRef(Node<T> reference){
+		references.remove(reference);
+	}
+	
+	/**
+	 * Cambia el valor de una referencia en una posicion
+	 * @param index posicion en la que se quiere cambiar la 
+	 * referencia 
+	 * @param reference nueva referencia
+	 */
+	public void setRef(int index, Node<T> reference){
+		references.set(index, reference);
 	}
 	
 }

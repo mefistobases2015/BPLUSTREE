@@ -20,6 +20,12 @@ public class LeaveNode<T> extends Node<T> {
 	private LeaveNode<T> next;
 	
 	/**
+	 * Nodoe anterior en la 
+	 * parte de las hojas
+	 */
+	private LeaveNode<T> prev;
+	
+	/**
 	 * Se crea un nodo hoja
 	 * con un orden 
 	 * @param order int que es el
@@ -51,6 +57,20 @@ public class LeaveNode<T> extends Node<T> {
 	 */
 	public void setNext(LeaveNode<T> next) {
 		this.next = next;
+	}
+
+	/**
+	 * @return the prev
+	 */
+	public LeaveNode<T> getPrev() {
+		return prev;
+	}
+
+	/**
+	 * @param prev the prev to set
+	 */
+	public void setPrev(LeaveNode<T> prev) {
+		this.prev = prev;
 	}
 
 }
